@@ -32,8 +32,8 @@
                 <article class="nav-text-info">
                     <div>
                         <span class="contacts">(044) 225 5 222</span>
-                        <span class="contacts">24 години/7 днів на тиждень</span>
-                        <span class="contacts">Безкоштовна доставка піци</span>
+                        <span class="contacts temp">24 години/7 днів на тиждень</span>
+                        <span class="contacts temp">Безкоштовна доставка піци</span>
                     </div>
                     <button class="btn btn-warning login-button">Ввійти</button>
                 </article>
@@ -59,69 +59,6 @@
 
             <div class="container pizza-selector">
                 <div class="row" id="pizza_list">
-
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail pizza-card">
-                            <img src="assets/images/pizza_1.jpg" class="full-pizza">
-
-                            <div class="caption">
-                                <h3 class="pizza-name">Thumbnail label</h3>
-                                <p class="pizza-type">Lorem lorem</p>
-                                <p class="pizza-ingr">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec
-                                    id elit non mi
-                                    porta
-                                    gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                </p>
-
-                                <p>
-                                    <a href="#" class="btn btn-warning">Button 2</a>
-                                    <a href="#" class="btn btn-default">Button 1</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail pizza-card">
-                            <img src="assets/images/pizza_2.jpg" class="full-pizza">
-
-                            <div class="caption">
-                                <h3 class="pizza-name">Thumbnail label</h3>
-                                <p class="pizza-type">Lorem lorem</p>
-                                <p class="pizza-ingr">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec
-                                    id elit non mi
-                                    porta
-                                    gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                </p>
-
-                                <p>
-                                    <a href="#" class="btn btn-warning">Button 3</a>
-                                    <a href="#" class="btn btn-default">Button 4</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail pizza-card">
-                            <img src="assets/images/pizza_3.jpg" class="full-pizza">
-
-                            <div class="caption">
-                                <h3 class="pizza-name">Thumbnail label</h3>
-                                <p class="pizza-type">Lorem lorem</p>
-                                <p class="pizza-ingr">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec
-                                    id elit non mi
-                                    porta
-                                    gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
-                                </p>
-
-                                <p>
-                                    <a href="#" class="btn btn-warning">Button 5</a>
-                                    <a href="#" class="btn btn-default">Button 6</a>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </section>
@@ -131,36 +68,53 @@
             <p class="footer">Доставка піци не здійснюється</p>
         </footer>
     </main>
+    <div class="dummie">
+    </div>
     <aside class="cart">
         <section class="order-label-container">
             <span class="order-label">Замовлення<span
                     class="badge rounded-pill text-bg-warning cart-amount">1</span></span>
             <button class="btn btn-default clear-cart-button">Очистити замовлення</button>
         </section>
-        <section class="cart-item">
-            <div class="cart-item-text-info">
-                <span class="cart-item-name">BBQ(Мала)</span>
-                <article class="cart-item-desc">
-                    <img src="assets/images/size-icon.svg" alt="size" />
-                    <span class="cart-item-size">30</span>
-                    <img src="assets/images/weight.svg" alt="weight" />
-                    <span class="cart-item-weight">460</span>
-                </article>
-                <article class="cart-item-amount">
-                    <span class="cart-item-cost">665грн</span>
-                    <button class="decrease-button">-</button>
-                    <span class="cart-item-amount">4</span>
-                    <button class="increase-button">+</button>
-                    <button class="delete-cart-item">×</button>
-                </article>
-            </div>
-            <div class="cart-item-img">
-                <img src="assets/images/pizza_2.jpg" class="half-pizza">
-            </div>
-        </section>
+        <div class="cart-items-container">
+            <section class="cart-item">
+                <div class="cart-item-text-info">
+                    <span class="cart-item-name">BBQ(Мала)</span>
+                    <article class="cart-item-desc">
+                        <img src="assets/images/size-icon.svg" alt="size" />
+                        <span class="cart-item-size">30</span>
+                        <img src="assets/images/weight.svg" alt="weight" />
+                        <span class="cart-item-weight">460</span>
+                    </article>
+                    <article class="cart-item-amount">
+                        <span class="cart-item-cost">665грн</span>
+                        <button class="decrease-button">-</button>
+                        <span class="cart-item-amount">4</span>
+                        <button class="increase-button">+</button>
+                        <button class="delete-cart-item">×</button>
+                    </article>
+                </div>
+                <div class="cart-item-img">
+                    <img src="assets/images/pizza_2.jpg" class="half-pizza">
+                </div>
+            </section>
+        </div>
+        <div class="order-cart-container">
+            <section class="order-cart-text">
+                <span>Сума замовлення</span>
+                <span class="order-cost">665грн</span>
+            </section>
+            <button class="btn btn-warning order-btn login-button button-order">Замовити</button>
+        </div>
     </aside>
+    <footer class="discount-container">
+        <img src="assets/images/discount.svg" />
+        <span class="discount-text">ЦЬОГО ТИЖНЯ НА ВСЕ</span>
+        <span class="discount">-20%</span>
+    </footer>
     <!--Own JavaScript -->
     <!--<script type="text/javascript"  src="assets/js/main.js"> </script>-->
+    <script src="index.js"></script>
 </body>
 
 </html>

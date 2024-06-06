@@ -18,24 +18,25 @@
 }
 
 body {
+    overflow-x: hidden;
     display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
+    flex-direction: row;
     height: 120vh;
-    width: 100%;
     font-family: "Roboto", sans-serif;
     background: rgb(235, 229, 192);
     background: linear-gradient(0deg, rgba(235, 229, 192, 1) 0%, rgba(255, 255, 255, 1) 100%);
 }
 
 main {
+    flex-grow: 3;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 75%;
+    height: fit-content;
+    min-width: 300px;
 }
 
 .heading {
+    z-index: 3;
     box-sizing: border-box;
     display: flex;
     text-align: center;
@@ -43,7 +44,11 @@ main {
     background-color: rgb(18, 40, 40);
     flex-direction: row;
     position: sticky;
-    top: 0px
+    top: -1px;
+}
+
+.isSticky {
+    background-color: rgba(18, 40, 40, 0.92);
 }
 
 .nav-contacts {
@@ -77,15 +82,17 @@ main {
 }
 
 .all-pizza-label {
-    font-size: 1.65em;
+    font-size: 1.4em;
     font-weight: bold;
     text-align: center;
+    margin-top: 0.5em;
 }
 
 .pizza-chooser-container {
     text-align: center;
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .pizza-filter {
@@ -101,7 +108,7 @@ main {
 }
 
 .pizza-menu {
-    padding: 2em;
+    padding-bottom: 1em;
     background: rgb(255, 255, 202);
     background: linear-gradient(0deg, rgba(255, 255, 202, 1) 0%, rgba(255, 255, 241, 1) 100%);
 }
@@ -119,10 +126,12 @@ main {
 }
 
 .pizza-card {
+    position: relative;
     background-color: white;
     padding: 0.5em;
     border: 1.4px solid lightgray;
     border-radius: 7px;
+    margin-bottom: 0.5em;
 }
 
 .pizza-name {
@@ -139,8 +148,10 @@ main {
 }
 
 .additional-info {
+    padding: 1em;
     border-top: 1px solid lightgray;
     display: flex;
+    text-align: center;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -152,11 +163,18 @@ main {
 
 .cart {
     height: 100%;
-    width: 25%;
+    /* flex: 1 315px; */
     position: fixed;
     right: 0px;
-    top: 0px;
+    top: 0;
+    display: flex;
+    flex-direction: column;
     background-color: rgb(235, 236, 229);
+    box-shadow: -3px -1px 14px 1px rgba(0, 0, 0, 0.2);
+}
+
+.cart-items-container {
+    min-height: calc(134px*4);
 }
 
 .order-label-container {
@@ -264,4 +282,168 @@ img[alt="weight"] {
 .amount-of-pizza {
     color: aliceblue !important;
     font-weight: bold;
+}
+
+.pizza-size-info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.pizza-size-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.pizza-ingr {
+    padding: 0px;
+    margin: 0px;
+}
+
+.cart-item-desc-container {
+    margin-bottom: 1em;
+}
+
+.pizza-cost-for-size {
+    font-size: 1.8em;
+    font-weight: bold;
+    margin-bottom: -0.2em;
+}
+
+.money-type {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-bottom: 0.2em;
+}
+
+.cart-item-desc-container .cart-item-desc {
+    margin-bottom: -0.4em;
+}
+
+.discount-container {
+    margin-left: 0.8em;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 80px;
+    background-color: rgb(234, 134, 46);
+    position: fixed;
+    bottom: 0px;
+    text-align: center;
+}
+
+.discount-container img {
+    transform: translateY(-7px);
+}
+
+.discount-text,
+.discount {
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+    padding-bottom: 0.5em;
+}
+
+.discount-text {
+    border-bottom: 2px dashed rgb(188, 107, 35);
+}
+
+.dummie {
+    min-width: 322px;
+}
+
+.order-cart-container {
+    border-top: 2px solid lightgray;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-height: 134px;
+    padding: 0.5em;
+    font-weight: bold;
+}
+
+.order-cart-text {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.order-cost {
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+.badge-popular,
+.badge-new {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    border-radius: 7px;
+    color: white;
+    font-weight: bold;
+    background-color: rgb(121, 175, 40);
+    padding: 0.3em;
+    font-size: 1em;
+}
+
+.badge-new {
+    background-color: rgb(205, 59, 59);
+}
+
+@media (max-width: 1137px) {
+    .temp {
+        display: none;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .cart {
+        max-width: 250px;
+    }
+
+    .dummie {
+        min-width: 250px;
+    }
+
+    .order-cart-container {
+        transform: translateY(-20px);
+    }
+
+    .contacts {
+        margin: 0px;
+        font-size: 0.85em;
+    }
+}
+
+@media (max-width: 550px) {
+
+    .additional-info {
+        display: none;
+    }
+
+    body {
+        flex-direction: column;
+    }
+
+    .dummie {
+        display: none;
+    }
+
+    .cart {
+        position: static;
+        max-width: 100%;
+    }
+
+    .order-cart-container {
+        padding: 1em;
+        transform: translateY(40px);
+    }
+
+    .discount-container {
+        display: none;
+    }
 }
