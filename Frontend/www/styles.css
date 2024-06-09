@@ -41,14 +41,14 @@ main {
     display: flex;
     text-align: center;
     font-weight: bold;
-    background-color: rgb(18, 40, 40);
+    background-color: rgb(6, 20, 20);
     flex-direction: row;
     position: sticky;
     top: -1px;
 }
 
 .isSticky {
-    background-color: rgba(18, 40, 40, 0.92);
+    background-color: rgba(6, 20, 20, 0.92);
 }
 
 .nav-contacts {
@@ -120,29 +120,40 @@ main {
 }
 
 .full-pizza {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     margin-bottom: 1em;
 }
 
+.pizza-picture {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .pizza-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
     position: relative;
     background-color: white;
     padding: 0.5em;
     border: 1.4px solid lightgray;
     border-radius: 7px;
     margin-bottom: 0.5em;
+    min-height: 545px;
 }
 
 .pizza-name {
     font-weight: bold;
     color: rgb(255, 136, 0);
-    font-size: 2.2em;
+    font-size: 1.8em;
     margin: 0;
 }
 
 .pizza-type {
-    font-size: 1em;
+    font-size: 0.7em;
     margin: 0;
     color: gray;
 }
@@ -163,7 +174,7 @@ main {
 
 .cart {
     height: 100%;
-    /* flex: 1 315px; */
+    max-width: 300px;
     position: fixed;
     right: 0px;
     top: 0;
@@ -174,6 +185,7 @@ main {
 }
 
 .cart-items-container {
+    overflow-y: auto;
     min-height: calc(134px*4);
 }
 
@@ -183,11 +195,11 @@ main {
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: space-around;
-    padding: 1.5em 1em;
+    padding: 1.5em 0.3em;
 }
 
 .order-label {
-    font-size: 1.15em;
+    font-size: 1em;
     overflow: hidden;
     font-weight: bold;
     white-space: nowrap;
@@ -198,6 +210,8 @@ main {
 }
 
 .clear-cart-button {
+    margin: 0 !important;
+    margin-left: 0.6em !important;
     font-size: 0.7em;
     display: inline;
     color: lightslategray;
@@ -207,7 +221,7 @@ main {
 
 .cart-item {
     border-bottom: 2px solid lightgray;
-    padding: 1em 0 1em 1em;
+    padding: 0.6em 0 0.6em 0.6em;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
@@ -285,9 +299,11 @@ img[alt="weight"] {
 }
 
 .pizza-size-info-container {
+    width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
 .pizza-size-info {
@@ -300,6 +316,7 @@ img[alt="weight"] {
 .pizza-ingr {
     padding: 0px;
     margin: 0px;
+    font-size: 0.9em;
 }
 
 .cart-item-desc-container {
@@ -307,7 +324,7 @@ img[alt="weight"] {
 }
 
 .pizza-cost-for-size {
-    font-size: 1.8em;
+    font-size: 1.5em;
     font-weight: bold;
     margin-bottom: -0.2em;
 }
@@ -351,10 +368,11 @@ img[alt="weight"] {
 }
 
 .dummie {
-    min-width: 322px;
+    min-width: 300px;
 }
 
 .order-cart-container {
+    transform: translateY(-15px);
     border-top: 2px solid lightgray;
     background-color: white;
     display: flex;
@@ -393,21 +411,52 @@ img[alt="weight"] {
     background-color: rgb(205, 59, 59);
 }
 
-@media (max-width: 1137px) {
+.pizza-container {
+    padding: 0.45em !important;
+    padding-top: 0px !important;
+}
+
+@media (max-width: 1147px) {
     .temp {
         display: none;
     }
+
+    .pizza-card {
+        min-height: 520px;
+    }
+
+    .badge-new,
+    .badge-popular {
+        right: 7px;
+        top: 7px;
+    }
 }
 
-@media (max-width: 700px) {
-
-    .cart {
-        max-width: 250px;
+@media (max-width: 1005px) {
+    .pizza-card {
+        min-height: 570px;
     }
+}
 
-    .dummie {
-        min-width: 250px;
+@media(max-width: 970px) {
+    .pizza-card {
+        min-height: 570px;
     }
+}
+
+@media(max-width: 880px) {
+    .pizza-card {
+        min-height: 520px;
+    }
+}
+
+@media(max-width: 777px) {
+    .pizza-card {
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 900px) {
 
     .order-cart-container {
         transform: translateY(-20px);
@@ -417,9 +466,19 @@ img[alt="weight"] {
         margin: 0px;
         font-size: 0.85em;
     }
+
+    .badge-new,
+    .badge-popular {
+        right: 7px;
+        top: 7px;
+    }
+
+    .pizza-card {
+        min-height: 535px;
+    }
 }
 
-@media (max-width: 550px) {
+@media (max-width:620px) {
 
     .additional-info {
         display: none;

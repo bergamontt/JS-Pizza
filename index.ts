@@ -181,22 +181,58 @@ observer.observe(stickyElm)
 window.addEventListener('load', function () {
     for (let card of pizza_list)
         addPizzaCard(card);
+
+    const storedData = localStorage.getItem('pizzasInCart');
+    let orderList = [];
+    if (storedData) orderList = JSON.parse(storedData);
+    else localStorage.setItem('pizzasInCart', JSON.stringify([]));
+    orderList.forEach(pizza => addPizzaToCart(pizza.card, pizza.size, pizza.amount));
+
+    let filterSpans = document.querySelectorAll('.pizza-filter');
+    for (let span of filterSpans)
+        span.addEventListener('click', filter);
 });
+
+function filter(e): void {
+    const span = e.target;
+    toggleChosenFilter(span);
+    const filter: String = span.getAttribute("data-filter");
+    document.querySelector('#pizza_list').innerHTML = '';
+    let filteredPizza;
+    if (filter === 'all') filteredPizza = pizza_list;
+    if (filter === 'meat') filteredPizza = pizza_list.filter(pizza => pizza.content.meat);
+    if (filter === 'pineapple') filteredPizza = pizza_list.filter(pizza => pizza.content.pineapple);
+    if (filter === 'mushroom') filteredPizza = pizza_list.filter(pizza => pizza.content.mushroom);
+    if (filter === 'seafood') filteredPizza = pizza_list.filter(pizza => pizza.content.ocean);
+    if (filter === 'vega') filteredPizza = pizza_list.filter(pizza => !pizza.content.meat && !pizza.content.ocean);
+    filteredPizza.forEach(pizza => addPizzaCard(pizza));
+    updateNumOfAllPizza(filteredPizza.length);
+}
+
+function toggleChosenFilter(span: HTMLDivElement): void {
+    const lastFilter = document.querySelector(".chosen-filter");
+    lastFilter.setAttribute('class', 'pizza-filter');
+    span.setAttribute('class', 'pizza-filter chosen-filter')
+}
+
+function updateNumOfAllPizza(amount: Number): void {
+    document.querySelector('.amount-of-pizza').textContent = amount.toString();
+}
 
 function addPizzaCard(card): void {
     const cardContainer = document.querySelector('#pizza_list');
     const pizzaCard = document.createElement('div');
-    pizzaCard.setAttribute('class', 'col-sm-12 col-md-6 col-lg-4');
+    pizzaCard.setAttribute('class', 'col-sm-12 col-md-6 col-lg-4 pizza-container');
     const html = `<div class="thumbnail pizza-card">
-        <img src="${card.icon}" class="full-pizza">
         <div class="caption">
+        <div class="pizza-picture"><img src="${card.icon}" class="full-pizza"></div>
             <h3 class="pizza-name">${card.title}</h3>
             <p class="pizza-type">${card.type}</p>
             <p class="pizza-ingr">${getDecription(card)}</p>
-            <section class="pizza-size-info-container">
-            </section>
         </div>
-    </div>`
+        <section class="pizza-size-info-container">
+            </section>
+    </div>`;
     pizzaCard.innerHTML = html;
     setSizes(card, pizzaCard);
     setBadge(card, pizzaCard);
@@ -206,8 +242,9 @@ function addPizzaCard(card): void {
 function setSizes(card, pizzaCard: HTMLDivElement): void {
     let html = '';
     if (card.small_size) {
-        html += `<div class="pizza-size-info">
-        <div class="cart-item-desc-container">
+        const cont = document.createElement("div");
+        cont.setAttribute("class", 'pizza-size-info');
+        cont.innerHTML = `<div class="cart-item-desc-container">
             <article class="cart-item-desc">
                 <img src="assets/images/size-icon.svg" alt="size" />
                 <span class="cart-item-size">${card.small_size.size}</span>
@@ -215,16 +252,17 @@ function setSizes(card, pizzaCard: HTMLDivElement): void {
             <article class="cart-item-desc">
                 <img src="assets/images/weight.svg" />
                 <span class="cart-item-weight">${card.small_size.weight}</span>
-            </article>
-        </div>
+            </article></div>
         <span class="pizza-cost-for-size">${card.small_size.price}</span>
         <span class="money-type">грн.</span>
-        <button class="btn btn-warning login-button">Купити</button>
-    </div>`
+        <button class="btn btn-warning login-button btn-buy">Купити</button>`
+        cont.getElementsByClassName('btn-buy')[0].addEventListener('click', function () { buyPizza(card, true) });
+        pizzaCard.getElementsByClassName('pizza-size-info-container')[0].appendChild(cont);
     }
     if (card.big_size) {
-        html += '\n' + `<div class="pizza-size-info">
-        <div class="cart-item-desc-container">
+        const cont = document.createElement("div");
+        cont.setAttribute("class", 'pizza-size-info');
+        cont.innerHTML = `<div class="cart-item-desc-container">
             <article class="cart-item-desc">
                 <img src="assets/images/size-icon.svg" alt="size" />
                 <span class="cart-item-size">${card.big_size.size}</span>
@@ -236,22 +274,66 @@ function setSizes(card, pizzaCard: HTMLDivElement): void {
         </div>
         <span class="pizza-cost-for-size">${card.big_size.price}</span>
         <span class="money-type">грн.</span>
-        <button class="btn btn-warning login-button">Купити</button>
-    </div>`;
+        <button class="btn btn-warning login-button btn-buy">Купити</button>`;
+        cont.getElementsByClassName('btn-buy')[0].addEventListener('click', function () { buyPizza(card, false) });
+        pizzaCard.getElementsByClassName('pizza-size-info-container')[0].appendChild(cont);
     }
-    pizzaCard.getElementsByClassName('pizza-size-info-container')[0].innerHTML = html;
+}
+
+function buyPizza(card, isSmall: Boolean): void {
+    if (isInCart(card, isSmall))
+        increasePizza();
+    else {
+        let pizzasInCart = JSON.parse(localStorage.getItem('pizzasInCart'));
+        pizzasInCart.push({
+            card: card,
+            size: isSmall,
+            amount: 1
+        })
+        localStorage.setItem('pizzasInCart', JSON.stringify(pizzasInCart));
+        addPizzaToCart(card, isSmall, 1);
+    }
+}
+
+function isInCart(card, isSmall: Boolean): Boolean {
+    const cartItem = document.getElementById(card.id + isSmall);
+    if (cartItem)
+        return true;
+    return false;
+}
+
+function increasePizza(): void {
+
+}
+
+function addPizzaToCart(card, isSmall: Boolean, amount: number): void {
+    const item = document.createElement("div");
+    item.setAttribute("class", "cart-item");
+    item.setAttribute('id', `${card.id}${isSmall}`);
+    item.innerHTML = `<div class="cart-item-text-info">
+    <span class="cart-item-name">${isSmall ? card.title + "(Мала)" : card.title + "(Велика)"}</span>
+    <article class="cart-item-desc">
+        <img src="assets/images/size-icon.svg" alt="size" />
+        <span class="cart-item-size">${isSmall ? card.small_size.size : card.big_size.size}}</span>
+        <img src="assets/images/weight.svg" alt="weight" />
+        <span class="cart-item-weight">${isSmall ? card.small_size.weight : card.big_size.weight}</span>
+    </article>
+    <article class="cart-item-amount">
+        <span class="cart-item-cost">${isSmall ? card.small_size.price : card.big_size.price}</span>
+        <button class="decrease-button">-</button>
+        <span class="cart-item-amount">${amount}</span>
+        <button class="increase-button">+</button>
+        <button class="delete-cart-item">×</button>
+    </article></div>
+    <div class="cart-item-img"><img src="${card.icon}" class="half-pizza"></div>`;
+    document.querySelector(".cart-items-container").appendChild(item);
 }
 
 function setBadge(card, pizzaCard: HTMLDivElement): void {
-    if (card.is_new) {
+    if (card.is_new || card.is_popular) {
         let badge = document.createElement('div');
-        badge.setAttribute('class', 'badge-new');
-        badge.innerText = 'Нова';
-        pizzaCard.getElementsByClassName('pizza-card')[0].appendChild(badge);
-    } else if (card.is_popular) {
-        let badge = document.createElement('div');
-        badge.setAttribute('class', 'badge-popular');
-        badge.innerText = 'Популярна';
+        badge.setAttribute('class', `${card.is_new ? 'badge-new' : 'badge-popular'}`);
+        badge.innerText = `${card.is_new ? 'Нова' : 'Популярна'}`;
         pizzaCard.getElementsByClassName('pizza-card')[0].appendChild(badge);
     }
 }
