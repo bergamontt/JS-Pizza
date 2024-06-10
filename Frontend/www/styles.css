@@ -186,6 +186,7 @@ main {
 
 .cart-items-container {
     overflow-y: auto;
+    min-width: 300px;
     min-height: calc(134px*4);
 }
 

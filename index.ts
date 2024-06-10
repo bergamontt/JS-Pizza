@@ -183,15 +183,27 @@ window.addEventListener('load', function () {
         addPizzaCard(card);
 
     const storedData = localStorage.getItem('pizzasInCart');
-    let orderList = [];
-    if (storedData) orderList = JSON.parse(storedData);
+    let pizzasInCart = [];
+    if (storedData) pizzasInCart = JSON.parse(storedData);
     else localStorage.setItem('pizzasInCart', JSON.stringify([]));
-    orderList.forEach(pizza => addPizzaToCart(pizza.card, pizza.size, pizza.amount));
+    pizzasInCart.forEach(pizza => addPizzaToCart(pizza.card, pizza.size, pizza.amount));
 
     let filterSpans = document.querySelectorAll('.pizza-filter');
     for (let span of filterSpans)
         span.addEventListener('click', filter);
+
+    document.querySelector('.clear-cart-button').addEventListener('click', clearOrder);
+
+    updatePizzaCartAmount();
+    updateCartPrice();
 });
+
+function clearOrder(): void {
+    document.querySelector('.cart-items-container').innerHTML = "";
+    localStorage.setItem('pizzasInCart', JSON.stringify([]));
+    updatePizzaCartAmount();
+    updateCartPrice();
+}
 
 function filter(e): void {
     const span = e.target;
@@ -282,7 +294,7 @@ function setSizes(card, pizzaCard: HTMLDivElement): void {
 
 function buyPizza(card, isSmall: Boolean): void {
     if (isInCart(card, isSmall))
-        increasePizza();
+        increasePizza(card, isSmall);
     else {
         let pizzasInCart = JSON.parse(localStorage.getItem('pizzasInCart'));
         pizzasInCart.push({
@@ -296,14 +308,38 @@ function buyPizza(card, isSmall: Boolean): void {
 }
 
 function isInCart(card, isSmall: Boolean): Boolean {
-    const cartItem = document.getElementById(card.id + isSmall);
+    const cartItem = document.getElementById(`${card.id}${isSmall}`);
     if (cartItem)
         return true;
     return false;
 }
 
-function increasePizza(): void {
+function increasePizza(card, isSmall: Boolean): void {
+    const cartItem = document.getElementById(`${card.id}${isSmall}`);
+    const newValue = parseInt(cartItem.getElementsByClassName('cart-item-amount-pizza')[0].textContent) + 1;
+    cartItem.getElementsByClassName('cart-item-amount-pizza')[0].textContent = newValue.toString();
+    cartItem.getElementsByClassName('cart-item-cost')[0].textContent = `${newValue * (isSmall ? card.small_size.price : card.big_size.price)}грн`;
+    refreshPizzaStorage(card, isSmall, newValue);
+    updatePizzaCartAmount();
+    updateCartPrice()
+}
 
+function refreshPizzaStorage(card, isSmall: Boolean, newValue: Number): void {
+    let pizzasInCart = JSON.parse(localStorage.getItem('pizzasInCart'));
+    pizzasInCart[pizzasInCart.findIndex(pizza => pizza.card.title === card.title && pizza.size === isSmall)].amount = newValue;
+    localStorage.setItem('pizzasInCart', JSON.stringify(pizzasInCart));
+}
+
+function updatePizzaCartAmount(): void {
+    document.querySelector('.cart-amount').textContent = document.getElementsByClassName('cart-item').length.toString();
+}
+
+function updateCartPrice(): void {
+    let price = 0;
+    let pizzasInCart = JSON.parse(localStorage.getItem('pizzasInCart'));
+    for (let pizza of pizzasInCart)
+        price += pizza.amount * (pizza.size ? pizza.card.small_size.price : pizza.card.big_size.price);
+    document.querySelector(".order-cost").textContent = `${price}грн`;
 }
 
 function addPizzaToCart(card, isSmall: Boolean, amount: number): void {
@@ -314,19 +350,48 @@ function addPizzaToCart(card, isSmall: Boolean, amount: number): void {
     <span class="cart-item-name">${isSmall ? card.title + "(Мала)" : card.title + "(Велика)"}</span>
     <article class="cart-item-desc">
         <img src="assets/images/size-icon.svg" alt="size" />
-        <span class="cart-item-size">${isSmall ? card.small_size.size : card.big_size.size}}</span>
+        <span class="cart-item-size">${isSmall ? card.small_size.size : card.big_size.size}</span>
         <img src="assets/images/weight.svg" alt="weight" />
         <span class="cart-item-weight">${isSmall ? card.small_size.weight : card.big_size.weight}</span>
     </article>
     <article class="cart-item-amount">
-        <span class="cart-item-cost">${isSmall ? card.small_size.price : card.big_size.price}</span>
+        <span class="cart-item-cost">${isSmall ? card.small_size.price * amount : card.big_size.price * amount}грн</span>
         <button class="decrease-button">-</button>
-        <span class="cart-item-amount">${amount}</span>
+        <span class="cart-item-amount-pizza">${amount}</span>
         <button class="increase-button">+</button>
         <button class="delete-cart-item">×</button>
     </article></div>
     <div class="cart-item-img"><img src="${card.icon}" class="half-pizza"></div>`;
+    item.getElementsByClassName('decrease-button')[0].addEventListener('click', function () { decreasePizza(card, isSmall) });
+    item.getElementsByClassName('delete-cart-item')[0].addEventListener('click', function () { removePizza(card, isSmall) });
+    item.getElementsByClassName('increase-button')[0].addEventListener('click', function () { increasePizza(card, isSmall) });
     document.querySelector(".cart-items-container").appendChild(item);
+    updatePizzaCartAmount();
+    updateCartPrice()
+}
+
+function decreasePizza(card, isSmall: Boolean): void {
+    const cartItem = document.getElementById(`${card.id}${isSmall}`);
+    const newValue = parseInt(cartItem.getElementsByClassName('cart-item-amount-pizza')[0].textContent) - 1;
+    if (newValue === 0) {
+        removePizza(card, isSmall);
+        return;
+    }
+    cartItem.getElementsByClassName('cart-item-amount-pizza')[0].textContent = newValue.toString();
+    cartItem.getElementsByClassName('cart-item-cost')[0].textContent = `${newValue * (isSmall ? card.small_size.price : card.big_size.price)}грн`;
+    refreshPizzaStorage(card, isSmall, newValue);
+    updatePizzaCartAmount();
+    updateCartPrice()
+}
+
+function removePizza(card, isSmall: Boolean): void {
+    const cartItem = document.getElementById(`${card.id}${isSmall}`);
+    cartItem.remove();
+    let pizzasInCart = JSON.parse(localStorage.getItem('pizzasInCart'));
+    pizzasInCart = pizzasInCart.filter(pizza => pizza.card.title !== card.title || pizza.size !== isSmall);
+    localStorage.setItem('pizzasInCart', JSON.stringify(pizzasInCart));
+    updatePizzaCartAmount();
+    updateCartPrice();
 }
 
 function setBadge(card, pizzaCard: HTMLDivElement): void {
