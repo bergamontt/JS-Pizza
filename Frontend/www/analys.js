@@ -41,10 +41,14 @@ function draw() {
         data.addColumn('string', 'Тип піци');
         data.addColumn('number', 'Кількість');
         data.addRows(pizzaTypes.map((pizza) => [pizza.type, pizza.amount]));
+        document.querySelector(".shown-pizza").innerHTML = '';
+        document.querySelector(".shown-pizza").style.display = 'none';
     } else if (CURRENT_FILTER = 'size') {
         data.addColumn('string', 'Розмір піци');
         data.addColumn('number', 'Кількість');
         data.addRows(pizzaSizes.map((pizza) => [pizza.type, pizza.amount]));
+        document.querySelector(".shown-pizza").innerHTML = '';
+        document.querySelector(".shown-pizza").style.display = 'none';
     }
 
     let filterText;
@@ -73,10 +77,11 @@ function draw() {
         chart.draw(data, options);
     } else chart.draw(data, { showRowNumber: true, width: `${CURRENT_WIDTH}px`, height: `${CURRENT_HEIGHT}px` });
 
-    if (CURRENT_FILTER !== 'type' && CURRENT_FILTER !== 'size')
-        google.visualization.events.addListener(chart, 'select', selectHandler);
+    google.visualization.events.addListener(chart, 'select', selectHandler);
 
     function selectHandler() {
+        if (CURRENT_FILTER === 'type' || CURRENT_FILTER === 'size')
+            return;
         var selectedItem = chart.getSelection()[0];
         if (selectedItem) {
             var topping = data.getValue(selectedItem.row, 0);
