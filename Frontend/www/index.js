@@ -186,9 +186,50 @@ window.addEventListener('load', function () {
     for (let span of filterSpans)
         span.addEventListener('click', filter);
     document.querySelector('.clear-cart-button').addEventListener('click', clearOrder);
+    this.document.querySelector('.button-order').addEventListener('click', turnAnalysPage);
     updatePizzaCartAmount();
     updateCartPrice();
 });
+function turnAnalysPage() {
+    loadInfo();
+    clearOrder();
+    location.href = 'analys.html';
+}
+function loadInfo() {
+    let boughtPizza = JSON.parse(localStorage.getItem('boughtPizza'));
+    if (boughtPizza == null) {
+        boughtPizza = [];
+        localStorage.setItem('boughtPizza', JSON.stringify(boughtPizza));
+    }
+    let pizzasInCart = JSON.parse(localStorage.getItem('pizzasInCart'));
+    for (let pizza of pizzasInCart) {
+        if (getPizzaIndex(pizza) !== -1) {
+            updateBoughPizzaAmount(pizza);
+            continue;
+        }
+        boughtPizza.push({
+            title: (pizza.size ? `${pizza.card.title}(Мала)` : `${pizza.card.title}(Велика)`),
+            icon: pizza.card.icon,
+            type: pizza.card.type,
+            desc: getDecription(pizza.card),
+            size: (pizza.size ? `${pizza.card.small_size.size}` : `${pizza.card.big_size.size}`),
+            weight: (pizza.size ? `${pizza.card.small_size.weight}` : `${pizza.card.big_size.weight}`),
+            price: (pizza.size ? pizza.card.small_size.price * pizza.amount : pizza.card.big_size.price * pizza.amount),
+            amount: pizza.amount
+        });
+    }
+    localStorage.setItem('boughtPizza', JSON.stringify(boughtPizza));
+}
+function updateBoughPizzaAmount(pizza) {
+    let boughtPizza = JSON.parse(localStorage.getItem('boughtPizza'));
+    boughtPizza[getPizzaIndex(pizza)].amount = boughtPizza[getPizzaIndex(pizza)].amount + pizza.amount;
+    console.log(boughtPizza[getPizzaIndex(pizza)]);
+    localStorage.setItem('boughtPizza', JSON.stringify(boughtPizza));
+}
+function getPizzaIndex(pizza) {
+    let boughtPizza = JSON.parse(localStorage.getItem('boughtPizza'));
+    return boughtPizza.findIndex(bPizza => bPizza.title === (pizza.size ? `${pizza.card.title}(Мала)` : `${pizza.card.title}(Велика)`));
+}
 function clearOrder() {
     document.querySelector('.cart-items-container').innerHTML = "";
     localStorage.setItem('pizzasInCart', JSON.stringify([]));

@@ -33,6 +33,7 @@ main {
     flex-direction: column;
     height: fit-content;
     min-width: 300px;
+    height: 100%;
 }
 
 .heading {
@@ -75,6 +76,10 @@ main {
     background-color: orange;
     color: white;
     padding: 0.2em 0.3em;
+}
+
+a .login-button {
+    width: 100%;
 }
 
 .nav-text-info:first-of-type {

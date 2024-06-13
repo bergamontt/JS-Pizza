@@ -1,0 +1,78 @@
+body {
+    font-family: 'Roboto';
+    height: 100vh;
+}
+
+main {
+    width: 100%;
+}
+
+.filter {
+    background-color: transparent;
+    border: 0px;
+    font-weight: bold;
+    transition: all 0.5s ease-in-out;
+}
+
+.graph-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.outline-container {
+    background-color: white;
+    border-radius: 5px;
+    border: 2px solid lightgray;
+}
+
+.main-content {
+    padding: 0.5em;
+}
+
+.filter-content {
+    background-color: rgb(255, 136, 0);
+    border-radius: 3px;
+    border-end-end-radius: 0px;
+    border-end-start-radius: 0px;
+    padding: 0.7em;
+}
+
+.selected {
+    color: white;
+}
+
+.shown-pizza {
+    display: none;
+    background-color: white;
+    padding: 1em;
+    width: 25%;
+    border: 2px solid lightgray;
+    border-radius: 7px;
+    margin-left: 1em;
+}
+
+.cart-item-size:first-of-type {
+    margin-right: 0.5em;
+}
+
+.pizza-name {
+    font-size: 1.7em;
+}
+
+@media (max-width: 867px) {
+
+    .graph-container {
+        margin-top: 1.5em;
+        flex-direction: column;
+    }
+
+    .shown-pizza {
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-left: 0px;
+        min-width: 250px;
+    }
+}
