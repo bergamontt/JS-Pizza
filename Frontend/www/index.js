@@ -191,6 +191,10 @@ window.addEventListener('load', function () {
     updateCartPrice();
 });
 function turnAnalysPage() {
+    if (document.querySelector('.cart-items-container').innerHTML == '') {
+        window.alert("Ви не можете замовити з пустим кошиком.");
+        return;
+    }
     loadInfo();
     clearOrder();
     location.href = 'analys.html';
